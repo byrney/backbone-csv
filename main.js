@@ -6,14 +6,14 @@ var CsvModel = Backbone.Model.extend({
 var CsvCollection = Backbone.Collection.extend({
     model: CsvModel,
     url: 'data.csv',
-    sync: function(method, model, options){
-        d3.csv(this.url, (error, data) => {
-            if(error){
-                options.error(error);
-            }
-            options.success(data);
-        });
+    parse: function(response){
+        return d3.csv.parse(response);
     },
+    fetch: function(options){
+        options = options || {};
+        options.dataType = 'text';
+       return Backbone.Collection.prototype.fetch.call(this, options);
+    }
 });
 
 var CsvView = Backbone.View.extend({
